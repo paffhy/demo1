@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch, isReactive } from 'vue'
 import { getRoleList } from '@/request/api'
 import { RoleData } from '@/type/role'
 import { ElMessage } from 'element-plus'
 import type { Roleable } from '@/type/user'
 import { useRouter } from 'vue-router'
+import { useStore } from '@/stores/store'
 const route = useRouter()
 const roleName = ref('')
 const data = reactive(new RoleData())
@@ -29,9 +30,15 @@ function addRole() {
   roles.push(role)
   roleName.value = ''
 }
+const store = useStore()
 function onchange(row: Roleable) {
   route.push({
     name: 'authority',
+  })
+  store.$patch((store) => {
+    store.roleId = row.roleId
+    store.roleName = row.roleName
+    store.authority = row.authority
   })
 }
 </script>

@@ -4,6 +4,7 @@ import { LoginData } from '@/type/login'
 import type { FormInstance } from 'element-plus'
 import { login } from '@/request/api'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 const ruleFormRef = ref<FormInstance>()
 const router = useRouter()
 //表单数据
@@ -17,9 +18,9 @@ const rules = {
       trigger: 'blur',
     },
     {
-      min: 3,
+      min: 1,
       max: 10,
-      message: '账号长度在3到10之间',
+      message: '账号长度在1到10之间',
     },
   ],
   password: [
@@ -43,18 +44,21 @@ const submitForm = (formEl: FormInstance | undefined) => {
     .then(() => {
       login(toRaw(ruleForm))
         .then((data: any) => {
-          // console.log(res)
           localStorage.setItem('token', data.token)
           router.push('/')
         })
-        .catch((res) => {
-          console.log(res)
+        .catch(() => {
+          ElMessage.error('用户名或密码错误')
         })
     })
     .catch(() => {
       console.log('error submit')
       return false
     })
+}
+function onreset() {
+  ruleForm.username = ''
+  ruleForm.password = ''
 }
 </script>
 
@@ -83,7 +87,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         <el-button type="primary" @click="submitForm(ruleFormRef)" class="btn"
           >提交</el-button
         >
-        <el-button class="btn">重置</el-button>
+        <el-button class="btn" @click="onreset">重置</el-button>
       </el-form-item>
     </el-form>
   </div>

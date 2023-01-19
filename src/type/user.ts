@@ -5,11 +5,6 @@ export interface Userable {
   role: Roleable
 }
 
-export interface Roleable {
-  roleId: number
-  roleName: string
-}
-
 export interface SelectDatable {
   role: number
   nickName: string

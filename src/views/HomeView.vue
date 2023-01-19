@@ -3,6 +3,10 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const list = router.getRoutes().filter((v) => v.meta.isShow)
 const active = router.currentRoute.value.path
+function onquit() {
+  localStorage.removeItem('token')
+  router.replace('/login')
+}
 </script>
 
 <template>
@@ -17,7 +21,9 @@ const active = router.currentRoute.value.path
             <h2 class="title">后台管理系统</h2>
           </el-col>
           <el-col :span="4">
-            <span class="quit-login"> 退出登录 </span>
+            <span class="quit-login">
+              <el-button @click="onquit">退出登录</el-button>
+            </span>
           </el-col>
         </el-row>
       </el-header>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive, toRefs, watch } from 'vue'
-import { getRoleList, getUserList } from '@/request/api'
+import { getRoleList, getUserList, changeUser, deleteUser } from '@/request/api'
 import { InitUserData, type Userable } from '@/type/user'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
 const data = reactive(new InitUserData())
 //用来重置数据
 let backUsers: Userable[] //此时data.userlist还为空
@@ -52,6 +54,28 @@ function onedit(row: Userable) {
 
   dialogFormVisible.value = true
 }
+function ondelete(row: Userable) {
+  ElMessageBox.confirm(`您确认要删除${row.nickName}用户吗`, 'Warning', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      const index = userList.value.findIndex((value) => value.id === row.id)
+      userList.value.splice(index, 1)
+      deleteUser(row.id)
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消删除',
+      })
+    })
+}
 function onChang() {
   dialogFormVisible.value = false
   const user = userList.value.find((value) => value.id === userEdited.value.id)
@@ -59,8 +83,15 @@ function onChang() {
     (value) => value.roleId === userEdited.value.roleId
   )
   if (user && role) {
+    if (
+      user.nickName === userEdited.value.nickName &&
+      user.role.roleId === userEdited.value.roleId
+    ) {
+      return
+    }
     user.nickName = userEdited.value.nickName
     user.role = role
+    changeUser(user)
   }
 }
 
@@ -113,6 +144,9 @@ watch(
       <el-table-column label="操作" width="500">
         <template #default="scope">
           <el-button type="primary" @click="onedit(scope.row)">编辑</el-button>
+          <el-button type="primary" @click="ondelete(scope.row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
