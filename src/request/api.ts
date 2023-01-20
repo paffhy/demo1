@@ -1,6 +1,6 @@
 import http from './index'
 import type { LoginData } from '@/type/login'
-import type { Userable } from '@/type/user'
+import type { Roleable, Userable } from '@/type/user'
 import type { ChangeRole } from '@/type/authority'
 export function login(data: LoginData) {
   return http({
@@ -64,7 +64,15 @@ export function changeAuthority(data: ChangeRole) {
   return http({
     url: '/changeAuthority',
     method: 'post',
-    data: data,
+    data,
+  })
+}
+
+export function postRole(data: Roleable) {
+  return http({
+    url: '/addRole',
+    method: 'post',
+    data,
   })
 }
 

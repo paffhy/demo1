@@ -16,6 +16,9 @@ function onchange() {
   changeAuthority(role)
   router.push('/role')
 }
+function onreturn() {
+  router.go(-1)
+}
 </script>
 
 <template>
@@ -34,6 +37,7 @@ function onchange() {
     />
   </div>
   <el-button type="primary" @click="onchange">更改</el-button>
+  <el-button type="primary" @click="onreturn">返回</el-button>
 </template>
 
 <style scoped lang="scss"></style>

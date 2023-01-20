@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, watch, isReactive } from 'vue'
-import { getRoleList } from '@/request/api'
+import { getRoleList, postRole } from '@/request/api'
 import { RoleData } from '@/type/role'
 import { ElMessage } from 'element-plus'
 import type { Roleable } from '@/type/user'
@@ -23,10 +23,11 @@ function addRole() {
   }
   const roles = data.list
   const role: Roleable = {
-    roleId: roles.length,
+    roleId: roles.length + 1,
     roleName: roleName.value.replace(/\s+/g, ''),
     authority: [],
   }
+  postRole(role)
   roles.push(role)
   roleName.value = ''
 }
