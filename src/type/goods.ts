@@ -17,7 +17,7 @@ export class InitGoodData {
     introduce: '',
     page: 1,
     count: 0,
-    pagesize: 5,
+    pagesize: 8,
   }
   goods: Goodable[] = []
 }
