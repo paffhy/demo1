@@ -2,9 +2,12 @@
 import { reactive, ref, toRaw } from 'vue'
 import { LoginData } from '@/type/login'
 import type { FormInstance } from 'element-plus'
-import { login } from '@/request/api'
+import { getRoleList, login } from '@/request/api'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { useLoginStore } from '@/stores/store'
+
+const store = useLoginStore()
 const ruleFormRef = ref<FormInstance>()
 const router = useRouter()
 //表单数据
@@ -45,6 +48,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
       login(toRaw(ruleForm))
         .then((data: any) => {
           localStorage.setItem('token', data.token)
+          store.roleId = data.roleId
+          getRoleList().then((req: any) => {
+            store.authority = req.data.find(
+              (value: any) => value.roleId === store.roleId
+            ).authority
+          })
           router.push('/')
         })
         .catch(() => {

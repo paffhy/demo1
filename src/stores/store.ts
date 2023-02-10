@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Roleable } from '@/type/user'
+
 export const useStore = defineStore('main', {
   state: (): Roleable => {
     return {
@@ -8,5 +9,13 @@ export const useStore = defineStore('main', {
       authority: [],
     }
   },
+  persist: true,
+})
+
+export const useLoginStore = defineStore('login', {
+  state: () => ({
+    roleId: 0,
+    authority: [],
+  }),
   persist: true,
 })
